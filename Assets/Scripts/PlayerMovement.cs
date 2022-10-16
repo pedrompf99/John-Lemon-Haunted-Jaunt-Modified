@@ -18,12 +18,18 @@ public class PlayerMovement : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody> ();
     }
-    
+    private void Update()
+    {
+        m_Animator.SetBool("IsAttacking", Input.GetMouseButton(0));
+    }
+
     void FixedUpdate()
     {
         float horizontal = Input.GetAxis ("Horizontal");
         float vertical = Input.GetAxis ("Vertical");
+
         
+
         m_Movement.Set(horizontal, 0f, vertical);
         m_Movement.Normalize ();
         
