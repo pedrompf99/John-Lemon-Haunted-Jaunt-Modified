@@ -10,10 +10,12 @@ public class Patrol : MonoBehaviour
     public float minDistance = 5f;
     public float rotationRadius = 2f;
     private bool isFixedOnPlayer = false;
+    private float angle;
 
 
     void Start()
     {
+        angle = Random.Range(0, 360);
         player = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
 
@@ -45,21 +47,23 @@ public class Patrol : MonoBehaviour
             if (!agent.pathPending && agent.remainingDistance < 0.5f)
                 agent.destination = points[nextPoint].position;
         }
-        
-
     }
 
     void GotoNextPointNearPlayer()
     {
-        Vector3 newDestination = player.transform.position + new Vector3(Mathf.Cos(Random.Range(0, 360)) * rotationRadius, 0, Mathf.Sin(Random.Range(0, 360)) * rotationRadius);
         if (!isFixedOnPlayer)
         {
+            Vector3 newDestination = player.transform.position + new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * rotationRadius, 0, Mathf.Sin(Mathf.Deg2Rad * angle) * rotationRadius);
             agent.destination = newDestination;
             isFixedOnPlayer = true;
         } else
         {
             if (!agent.pathPending && agent.remainingDistance < 0.1f)
+            {
+                angle = (angle + Random.Range(-60, 60)) % 360;
+                Vector3 newDestination = player.transform.position + new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * rotationRadius, 0, Mathf.Sin(Mathf.Deg2Rad * angle) * rotationRadius);
                 agent.destination = newDestination;
+            }
         }
     }
 

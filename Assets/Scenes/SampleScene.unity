@@ -136,6 +136,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5153489875465556840, guid: 1d838fd0314b37846b11cbb35220d1e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5153489875465785160, guid: 1d838fd0314b37846b11cbb35220d1e6,
         type: 3}
       propertyPath: m_RootOrder
@@ -199,7 +204,7 @@ PrefabInstance:
     - target: {fileID: 5806205909765730484, guid: 1d838fd0314b37846b11cbb35220d1e6,
         type: 3}
       propertyPath: rotationRadius
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5806205909765730484, guid: 1d838fd0314b37846b11cbb35220d1e6,
         type: 3}
@@ -1068,6 +1073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ghost (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5153489875465556840, guid: 1d838fd0314b37846b11cbb35220d1e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5153489875465785160, guid: 1d838fd0314b37846b11cbb35220d1e6,
         type: 3}
@@ -17513,6 +17523,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 5153489875465556840, guid: 1d838fd0314b37846b11cbb35220d1e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5153489875465785160, guid: 1d838fd0314b37846b11cbb35220d1e6,
         type: 3}
