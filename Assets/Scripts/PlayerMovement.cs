@@ -5,30 +5,60 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float turnSpeed = 20f;
-    
-    Animator m_Animator;
-    Rigidbody m_Rigidbody;
-    Vector3 m_Movement;
-    Quaternion m_Rotation = Quaternion.identity;
+    [SerializeField]
+    private float turnSpeed = 20f;
+    [SerializeField]
+    private GameObject UIText;
+    [SerializeField]
+    private GameObject pickup_pan;
+    [SerializeField]
+    private GameObject pickup_vfx;
+    [SerializeField]
+    private GameObject player_pan;
+
+    private TextMesh UITextMesh;
+    private Animator m_Animator;
+    private Rigidbody m_Rigidbody;
+    private Vector3 m_Movement;
+    private Quaternion m_Rotation = Quaternion.identity;
+    private bool has_pan = false;
 
     // Start is called before the first frame update
     void Start()
     {
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody> ();
+        UITextMesh = UIText.GetComponent<TextMesh>();
     }
     private void Update()
     {
-        m_Animator.SetBool("IsAttacking", Input.GetMouseButton(0));
+        if (has_pan)
+        {
+            m_Animator.SetBool("IsAttacking", Input.GetMouseButton(0));
+        } else
+        {
+            if(Vector3.Distance(this.transform.position, pickup_pan.transform.position) < 1.5f)
+            {
+                UIText.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    has_pan = true;
+                    Destroy(pickup_pan);
+                    player_pan.SetActive(true);
+                    UIText.SetActive(false);
+                    pickup_vfx.SetActive(true);
+                }
+            } else
+            {
+                UIText.SetActive(false);
+            }
+        }
     }
 
     void FixedUpdate()
     {
         float horizontal = Input.GetAxis ("Horizontal");
         float vertical = Input.GetAxis ("Vertical");
-
-        
 
         m_Movement.Set(horizontal, 0f, vertical);
         m_Movement.Normalize ();
@@ -46,5 +76,10 @@ public class PlayerMovement : MonoBehaviour
     {
         m_Rigidbody.MovePosition (m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
         m_Rigidbody.MoveRotation (m_Rotation);
+    }
+
+    void PanReflection()
+    {
+        
     }
 }
