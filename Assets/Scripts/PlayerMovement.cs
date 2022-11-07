@@ -80,6 +80,17 @@ public class PlayerMovement : MonoBehaviour
 
     void PanReflection()
     {
-        
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("ProjectileGhost");
+        foreach(GameObject projectile in projectiles)
+        {
+            if (Vector3.Distance(player_pan.transform.position, projectile.transform.position) < 1.5f)
+            {
+                projectile.GetComponent<Rigidbody>().velocity = this.transform.forward * 3;
+                var main = projectile.GetComponent<ParticleSystem>().main;
+                main.startColor =
+                    new ParticleSystem.MinMaxGradient(Color.red, Color.red);
+                projectile.tag = "ProjectilePlayer";
+            }
+        }
     }
 }

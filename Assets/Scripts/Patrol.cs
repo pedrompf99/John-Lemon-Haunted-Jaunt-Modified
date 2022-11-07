@@ -1,6 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using Random = UnityEngine.Random;
+
 public class Patrol : MonoBehaviour
 {
     [SerializeField]
@@ -90,7 +93,14 @@ public class Patrol : MonoBehaviour
     void ShootPlayer()
     {
         GameObject shot = GameObject.Instantiate(projectile_vfx, this.transform.position + new Vector3(0f, 1f, 0f), Quaternion.identity);
-        shot.GetComponent<Rigidbody>().AddForce((player.transform.position - transform.position).normalized * 3, ForceMode.Impulse);
+        shot.GetComponent<Rigidbody>().velocity = (player.transform.position - transform.position).normalized * 3;
+        Destroy(shot, 5f);
+    }
+
+    public void Die()
+    {
+        GameObject.Instantiate(death_vfx, this.transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 
     void Update()
