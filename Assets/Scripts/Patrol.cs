@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class Patrol : MonoBehaviour
 {
     [SerializeField]
-    private Transform[] points;
+    private Vector3[] points;
     [SerializeField]
     private GameObject death_vfx;
     [SerializeField]
@@ -62,13 +62,13 @@ public class Patrol : MonoBehaviour
         // Set the agent to go to the currently selected destination.
         if (isFixedOnPlayer)
         {
-            agent.destination = points[nextPoint].position;
+            agent.destination = points[nextPoint];
             isFixedOnPlayer = false;
         }
         else
         {
             if (!agent.pathPending && agent.remainingDistance < 0.5f)
-                agent.destination = points[nextPoint].position;
+                agent.destination = points[nextPoint];
         }
     }
 
@@ -100,6 +100,7 @@ public class Patrol : MonoBehaviour
     public void Die()
     {
         GameObject.Instantiate(death_vfx, this.transform.position, Quaternion.identity);
+        GameObject.Find("GameManager").GetComponent<GameManager>().RemoveGhost(this.gameObject);
         Destroy(this.gameObject);
     }
 

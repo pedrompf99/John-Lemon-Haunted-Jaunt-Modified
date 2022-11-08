@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
                     player_pan.SetActive(true);
                     UIText.SetActive(false);
                     pickup_vfx.SetActive(true);
+                    GameObject.Find("GameManager").GetComponent<GameManager>().StartSpawningGhosts();
                 }
             } else
             {
@@ -83,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
         GameObject[] projectiles = GameObject.FindGameObjectsWithTag("ProjectileGhost");
         foreach(GameObject projectile in projectiles)
         {
-            if (Vector3.Distance(player_pan.transform.position, projectile.transform.position) < 1.5f)
+            if (Vector3.Distance(player_pan.transform.position, projectile.transform.position) < 1.2f)
             {
                 projectile.GetComponent<Rigidbody>().velocity = this.transform.forward * 3;
                 var main = projectile.GetComponent<ParticleSystem>().main;
