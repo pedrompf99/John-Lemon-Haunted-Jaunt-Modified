@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,21 +16,36 @@ public class PlayerMovement : MonoBehaviour
     private GameObject pickup_vfx;
     [SerializeField]
     private GameObject player_pan;
-
-    private TextMesh UITextMesh;
+    
     private Animator m_Animator;
     private Rigidbody m_Rigidbody;
     private Vector3 m_Movement;
     private Quaternion m_Rotation = Quaternion.identity;
     private bool has_pan = false;
+    private int player_lives = 3;
+    private bool startingText = true;
 
     // Start is called before the first frame update
     void Start()
     {
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody> ();
-        UITextMesh = UIText.GetComponent<TextMesh>();
+        UIText.GetComponent<TMPro.TextMeshProUGUI>().text = "Pick up the pan and defeat all the ghosts in order to escape!";
+        StartCoroutine(MakeUITextDisappear());
     }
+    
+    public void DoorIsOpen()
+    {
+        UIText.GetComponent<TMPro.TextMeshProUGUI>().text = "Well done, the door has opened now you can escape!";
+        StartCoroutine(MakeUITextDisappear());
+    }
+
+    IEnumerator MakeUITextDisappear()
+    {
+        yield return new WaitForSeconds(3f);
+        startingText = false;
+    }
+
     private void Update()
     {
         if (has_pan)
@@ -37,21 +53,25 @@ public class PlayerMovement : MonoBehaviour
             m_Animator.SetBool("IsAttacking", Input.GetMouseButton(0));
         } else
         {
-            if(Vector3.Distance(this.transform.position, pickup_pan.transform.position) < 1.5f)
+            if (!startingText)
             {
-                UIText.SetActive(true);
-                if (Input.GetKeyDown(KeyCode.E))
+                if(Vector3.Distance(this.transform.position, pickup_pan.transform.position) < 1.5f)
                 {
-                    has_pan = true;
-                    Destroy(pickup_pan);
-                    player_pan.SetActive(true);
+                    UIText.GetComponent<TMPro.TextMeshProUGUI>().text = "Press E to interact";
+                    UIText.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        has_pan = true;
+                        Destroy(pickup_pan);
+                        player_pan.SetActive(true);
+                        UIText.SetActive(false);
+                        pickup_vfx.SetActive(true);
+                        GameObject.Find("GameManager").GetComponent<GameManager>().StartSpawningGhosts();
+                    }
+                } else
+                {
                     UIText.SetActive(false);
-                    pickup_vfx.SetActive(true);
-                    GameObject.Find("GameManager").GetComponent<GameManager>().StartSpawningGhosts();
                 }
-            } else
-            {
-                UIText.SetActive(false);
             }
         }
     }
@@ -91,6 +111,25 @@ public class PlayerMovement : MonoBehaviour
                 main.startColor =
                     new ParticleSystem.MinMaxGradient(Color.red, Color.red);
                 projectile.tag = "ProjectilePlayer";
+            }
+        }
+    }
+    
+    public void CheckInPlayerHit(GameObject Projectile)
+    {
+        StartCoroutine(CheckPlayerHit(Projectile));
+    }
+
+    IEnumerator CheckPlayerHit(GameObject Projectile)
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (Projectile.tag.Equals("ProjectileGhost"))
+        {
+            GameObject.Find("GameManager").GetComponent<GameManager>().LoseLife(player_lives);
+            player_lives--;
+            if (player_lives == 0)
+            {
+                GameObject.Find("GameManager").GetComponent<GameManager>().m_playerLostGame = true;
             }
         }
     }

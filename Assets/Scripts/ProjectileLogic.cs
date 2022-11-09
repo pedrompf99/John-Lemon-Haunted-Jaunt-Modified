@@ -13,7 +13,7 @@ public class ProjectileLogic : MonoBehaviour
         }
         if(this.tag.Equals("ProjectileGhost") && other.tag.Equals("Player"))
         {
-            Debug.Log("Hit");
+            other.GetComponent<PlayerMovement>().CheckInPlayerHit(this.gameObject);
         }
     }
 }
